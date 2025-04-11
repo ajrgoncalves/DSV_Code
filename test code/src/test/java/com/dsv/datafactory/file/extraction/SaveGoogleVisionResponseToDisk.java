@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+
 @Disabled
 public class SaveGoogleVisionResponseToDisk {
     GoogleOcr googleOcr = new GoogleOcr();
@@ -28,77 +29,78 @@ public class SaveGoogleVisionResponseToDisk {
                 AnnotateImageResponse response = loadAnnotateImageResponseFromDisk(imagePath);
                 GoogleVisionResponse parsed = new OcrParser(response).parse();
                 saveDocument(parsed, dst);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
     }
 
-        @Test
-        void ProcessImagesAndSaveToDisk () {
+    @Test
+    void ProcessImagesAndSaveToDisk() {
 
-            for (File image : new File(imageDir).listFiles())
-                try {
-                    String imagePath = image.getAbsolutePath();
-                    String dst = dstDir + image.getName().substring(0, image.getName().length() - ".png".length()) + ".json";
-                    AnnotateImageResponse response = googleOcr.generateResponseFromImage(imagePath);
-                    GoogleVisionResponse parsed = new OcrParser(response).parse();
-                    saveDocument(parsed, dst);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        for (File image : new File(imageDir).listFiles())
+            try {
+                String imagePath = image.getAbsolutePath();
+                String dst = dstDir + image.getName().substring(0, image.getName().length() - ".png".length()) + ".json";
+                AnnotateImageResponse response = googleOcr.generateResponseFromImage(imagePath);
+                GoogleVisionResponse parsed = new OcrParser(response).parse();
+                saveDocument(parsed, dst);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
+    }
+
+    String serialize(GoogleVisionResponse doc) {
+        String sDoc = null;
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            sDoc = mapper.writeValueAsString(doc);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
-        String serialize (GoogleVisionResponse doc){
-            String sDoc = null;
+        return sDoc;
+    }
+
+    void saveDocument(GoogleVisionResponse document, String dst) throws IOException {
+        String serialized = serialize(document);
+        if (serialized != null) {
+            FileOutputStream outputStream = new FileOutputStream(dst);
+            byte[] strToBytes = serialized.getBytes();
+            outputStream.write(strToBytes);
+
+            outputStream.close();
+        }
+    }
+
+    AnnotateImageResponse loadAnnotateImageResponseFromDisk(String objPath) {
+        AnnotateImageResponse annotateImageResponse = null;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(objPath);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            annotateImageResponse = (AnnotateImageResponse) objectInputStream.readObject();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return annotateImageResponse;
+    }
+
+    GoogleVisionResponse loadGoogleVisionResponseFromDisk(String path) {
+        GoogleVisionResponse response = null;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(path);
+            String sResponse = IOUtils.toString(fileInputStream, StandardCharsets.UTF_8);
             ObjectMapper mapper = new ObjectMapper();
-            try {
-                sDoc = mapper.writeValueAsString(doc);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            return sDoc;
+            response = mapper.readValue(sResponse, GoogleVisionResponse.class);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        void saveDocument (GoogleVisionResponse document, String dst) throws IOException {
-            String serialized = serialize(document);
-            if (serialized != null) {
-                FileOutputStream outputStream = new FileOutputStream(dst);
-                byte[] strToBytes = serialized.getBytes();
-                outputStream.write(strToBytes);
+        return response;
+    }
 
-                outputStream.close();
-            }
-        }
-
-        AnnotateImageResponse loadAnnotateImageResponseFromDisk (String objPath){
-            AnnotateImageResponse annotateImageResponse = null;
-            try {
-                FileInputStream fileInputStream = new FileInputStream(objPath);
-                ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-                annotateImageResponse = (AnnotateImageResponse) objectInputStream.readObject();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return annotateImageResponse;
-        }
-
-        GoogleVisionResponse loadGoogleVisionResponseFromDisk(String path){
-            GoogleVisionResponse response = null;
-            try {
-                FileInputStream fileInputStream = new FileInputStream(path);
-                String sResponse = IOUtils.toString(fileInputStream, StandardCharsets.UTF_8);
-                ObjectMapper mapper = new ObjectMapper();
-                response = mapper.readValue(sResponse, GoogleVisionResponse.class);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return response;
-        }
-
-        }
+}
 
 

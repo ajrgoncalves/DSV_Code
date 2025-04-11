@@ -4,46 +4,46 @@ import com.google.cloud.vision.v1.Feature;
 
 public class Config {
 
-	public String imageExtractionMetadataTopic;
-	public Feature feature;
+    public String imageExtractionMetadataTopic;
+    public Feature feature;
 
-	public String extractedDocumentTopic;
+    public String extractedDocumentTopic;
 
-	public String kafkaClientId;
+    public String kafkaClientId;
 
-	public String kafkaGroupId;
+    public String kafkaGroupId;
 
-	public String kafkaAutoOffsetReset;
+    public String kafkaAutoOffsetReset;
 
-	public int kafkaCommitIntervalMs;
+    public int kafkaCommitIntervalMs;
 
-	public String enableKafkaSSL;
+    public String enableKafkaSSL;
 
-	public String kafkaBootstrapServers;
+    public String kafkaBootstrapServers;
 
-	public String kafkaMaxRequestSize;
+    public String kafkaMaxRequestSize;
 
-	public String kafkaTruststorePath;
+    public String kafkaTruststorePath;
 
-	public String kafkaTruststoreFile;
+    public String kafkaTruststoreFile;
 
-	public String kafkaTruststorePassword;
+    public String kafkaTruststorePassword;
 
-	public String kafkaSLLProtocol;
+    public String kafkaSLLProtocol;
 
-	public String kafkaSSLCipher;
+    public String kafkaSSLCipher;
 
-	public int kakfaPollIntervalMs;
+    public int kakfaPollIntervalMs;
 
-	public int kafkaRequestTimeoutMs;
+    public int kafkaRequestTimeoutMs;
 
     public String lineServiceUrl;
 
-	public String startNumberOfClasses;
+    public String startNumberOfClasses;
 
-	public String enableRBAC;
+    public String enableRBAC;
 
-	public String goodnessOfFit;
+    public String goodnessOfFit;
 
     public String googleCredPath;
 

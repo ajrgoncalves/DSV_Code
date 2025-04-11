@@ -1,12 +1,11 @@
 package com.dsv.datafactory.file.extraction;
+
 import com.dsv.datafactory.file.extraction.processor.Config;
-import com.dsv.datafactory.file.extraction.processor.domain.ocr.GoogleOcr;
 import com.dsv.datafactory.file.extraction.processor.domain.ocr.GoogleOcrP;
 import com.dsv.datafactory.file.extraction.processor.models.EntityAnnotation;
 import com.dsv.datafactory.file.extraction.processor.models.GoogleVisionResponse;
 import com.dsv.datafactory.model.*;
 import com.dsv.datafactory.model.Word;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.FileInputStream;
-
 import java.nio.charset.StandardCharsets;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -26,17 +24,18 @@ public class NegativeCoordsTest {
     GoogleVisionResponse ocr = loadGoogleVisionResponseFromDisk("src/test/resources/images/negativeCoords/negativeCoordsExample.json");
 
     @BeforeAll
-    void setup(){
+    void setup() {
         Config config = new Config();
         config.runGVInPararell = "false";
-         refac = new GoogleOcrP(config);
+        refac = new GoogleOcrP(config);
     }
+
     @Test
-    void negativeCoordinatesTest(){
+    void negativeCoordinatesTest() {
         EntityAnnotation entity1 = ocr.getTextAnnotations().get(4);
         Word word1 = refac.generateWord(entity1);
         System.out.println(entity1.getBoundingPoly());
-        Assertions.assertTrue(word1.getBoundingBox().getX1()>=0 & word1.getBoundingBox().getX2()>=0 & word1.getBoundingBox().getY1()>=0 & word1.getBoundingBox().getY2()>=0);
+        Assertions.assertTrue(word1.getBoundingBox().getX1() >= 0 & word1.getBoundingBox().getX2() >= 0 & word1.getBoundingBox().getY1() >= 0 & word1.getBoundingBox().getY2() >= 0);
     }
 
     @Test
@@ -49,7 +48,7 @@ public class NegativeCoordsTest {
     }
 
 
-    GoogleVisionResponse loadGoogleVisionResponseFromDisk(String path){
+    GoogleVisionResponse loadGoogleVisionResponseFromDisk(String path) {
         GoogleVisionResponse response = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(path);

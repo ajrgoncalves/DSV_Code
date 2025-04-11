@@ -3,7 +3,6 @@ package com.dsv.datafactory.file.extraction;
 import com.dsv.datafactory.model.*;
 import com.dsv.datafactory.model.Word;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.cloud.vision.v1.*;
@@ -162,7 +161,7 @@ public class LineExtractionTest {
 
 
         document.setPages(pages);
-       generateInputFromDocument(document);
+        generateInputFromDocument(document);
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(new File(Paths.get(basePath.toString(), document.getKey() + ".json").toString()), document);
         String jsonString = mapper.writeValueAsString(document);
@@ -170,46 +169,48 @@ public class LineExtractionTest {
     }
 
     public void generateInputFromDocument(Document document) throws IOException, JsonProcessingException {
-        try{
-            for (com.dsv.datafactory.model.Page page:document.getPages()){
+        try {
+            for (com.dsv.datafactory.model.Page page : document.getPages()) {
                 JsonObject requestValue = new JsonObject();
                 List<BoundingBox> wordBoxes = page.getLines().get(0).getWords().stream().map(Word::getBoundingBox).collect(Collectors.toList());
 
                 List<String> strBoxes = new ArrayList<String>();
-                for(BoundingBox box : wordBoxes){
+                for (BoundingBox box : wordBoxes) {
                     strBoxes.add(box.serialize());
                 }
 
                 JsonArray values = JsonParser.parseString(strBoxes.toString()).getAsJsonArray();
-                startNumberOfClasses = String.valueOf(Math.round(2* Math.log(values.size())));
-                requestValue.add("values",values);
-                requestValue.addProperty( "start_num_of_class",startNumberOfClasses);
-                requestValue.addProperty("min_goodness_of_fit",goodnessOfFit);
+                startNumberOfClasses = String.valueOf(Math.round(2 * Math.log(values.size())));
+                requestValue.add("values", values);
+                requestValue.addProperty("start_num_of_class", startNumberOfClasses);
+                requestValue.addProperty("min_goodness_of_fit", goodnessOfFit);
                 requestValue.addProperty("type", "customs");
                 String results = submitRequest(requestValue.toString());
-                parseResults(results,page);
+                parseResults(results, page);
                 //System.out.println(results);
             }
-        }catch(Exception e){
-            logger.log(Level.SEVERE,e.getMessage());
-        }}
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+    }
 
-    public void parseResults(String results, com.dsv.datafactory.model.Page originalPage){
+    public void parseResults(String results, com.dsv.datafactory.model.Page originalPage) {
         List<Line> newLines = new ArrayList<>();
-        int originalNumWords =  originalPage.getLines().get(0).getWords().size();
+        int originalNumWords = originalPage.getLines().get(0).getWords().size();
         JenksResponse jenks = deserializeResponse(results);
-        for (Cluster clust : jenks.getValues()){
+        for (Cluster clust : jenks.getValues()) {
             int lineNumber = clust.getLineNumber();
             List<Integer> meansForLine = clust.getYMeans();
             Line newLine = new Line();
-            List<Word> newWords = originalPage.getLines().get(0).getWords().stream().filter(x->meansForLine.stream().anyMatch(i -> i.equals(x.getyMean()))).collect(Collectors.toList());
+            List<Word> newWords = originalPage.getLines().get(0).getWords().stream().filter(x -> meansForLine.stream().anyMatch(i -> i.equals(x.getyMean()))).collect(Collectors.toList());
             newLine.setLineNumber(lineNumber);
             newLine.setWords(newWords);
             newLines.add(newLine);
         }
-        if (!newLines.isEmpty() && originalNumWords == newLines.stream().map(Line::getWords).mapToLong(List::size).sum()){
+        if (!newLines.isEmpty() && originalNumWords == newLines.stream().map(Line::getWords).mapToLong(List::size).sum()) {
             originalPage.setLines(newLines);
-        }}
+        }
+    }
 
     String submitRequest(String jsonRequest) throws IOException {
 
@@ -232,23 +233,21 @@ public class LineExtractionTest {
 //            StatusLine status = response.getStatusLine();
             responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
 
-        }
-        catch (Exception e){
-            logger.log(Level.SEVERE,e.getMessage());
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
         }
         return responseBody;
     }
 
     JenksResponse deserializeResponse(String jsonResponse) {
-        byte [] data = jsonResponse.getBytes(StandardCharsets.UTF_8);
+        byte[] data = jsonResponse.getBytes(StandardCharsets.UTF_8);
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         JenksResponse jenks = null;
-        try{
+        try {
             jenks = mapper.readValue(data, JenksResponse.class);
-        }
-        catch (Exception e){
-            logger.log(Level.SEVERE,e.getMessage());
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, e.getMessage());
         }
         return jenks;
     }

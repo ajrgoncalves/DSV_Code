@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Implementation-Title: PDFBox JBIG2 ImageIO plugin
+Automatic-Module-Name: org.apache.pdfbox.jbig2
+Implementation-Version: 3.0.3
+Archiver-Version: Plexus Archiver
+Built-By: lehmi
+Specification-Vendor: The Apache Software Foundation
+Specification-Title: PDFBox JBIG2 ImageIO plugin
+Implementation-Vendor-Id: org.apache.pdfbox
+Implementation-Vendor: The Apache Software Foundation
+Created-By: Apache Maven 3.5.4
+Build-Jdk: 1.8.0_232
+Specification-Version: 3.0
+Implementation-URL: https://www.apache.org/jbig2-imageio/
+

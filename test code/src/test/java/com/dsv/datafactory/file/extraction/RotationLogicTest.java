@@ -1,13 +1,14 @@
 package com.dsv.datafactory.file.extraction;
+
 import com.dsv.datafactory.file.extraction.processor.Config;
-import com.dsv.datafactory.file.extraction.processor.domain.ocr.GoogleOcr;
 import com.dsv.datafactory.file.extraction.processor.domain.ocr.GoogleOcrP;
+import com.dsv.datafactory.file.extraction.processor.models.BoundingPoly;
+import com.dsv.datafactory.file.extraction.processor.models.EntityAnnotation;
+import com.dsv.datafactory.file.extraction.processor.models.GooglePage;
 import com.dsv.datafactory.file.extraction.processor.models.GoogleVisionResponse;
 import com.dsv.datafactory.model.*;
 import com.dsv.datafactory.model.Word;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.dsv.datafactory.file.extraction.processor.models.*;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.*;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RotationLogicTest {
     //GoogleOcr refac = new GoogleOcr();
-    GoogleOcrP refac ;
+    GoogleOcrP refac;
     GoogleVisionResponse ocr270; //= loadGoogleVisionResponse("src/test/resources/SerializedGoogleVisionResponses/0be2936c091083d30d5ec089e1c26ecd4becfa0a8b511c83febc8c57bc3d2cdc1.json");
     GoogleVisionResponse ocr90; //= loadGoogleVisionResponse("src/test/resources/SerializedGoogleVisionResponses/4ff6d7edf0d7f06f53cd480a21ccaabaab1ad426fb471898741d8bde05b5f9f84.json");
     GoogleVisionResponse ocr180; //= loadGoogleVisionResponse("src/test/resources/SerializedGoogleVisionResponses/3b391e3b3fd948c2eed56b20a68ef39178736ca9f5d0c8c5ff025a3a348f22093.json");
@@ -31,7 +32,7 @@ public class RotationLogicTest {
     }
 
     @BeforeEach
-    void setup(){
+    void setup() {
         Config config = new Config();
         config.runGVInPararell = "false";
         refac = new GoogleOcrP(config);
@@ -43,7 +44,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void getMinMaxCoordinatesTest0(){
+    void getMinMaxCoordinatesTest0() {
         EntityAnnotation entity1 = ocr0.getTextAnnotations().get(5);
         EntityAnnotation entity2 = ocr0.getTextAnnotations().get(7);
         BoundingPoly bp1 = getBoundingPoly(entity1);
@@ -63,7 +64,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void getMinMaxCoordinatesTest270(){
+    void getMinMaxCoordinatesTest270() {
         EntityAnnotation entity3 = ocr270.getTextAnnotations().get(3);
         EntityAnnotation entity4 = ocr270.getTextAnnotations().get(10);
         BoundingPoly bp3 = getBoundingPoly(entity3);
@@ -84,7 +85,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void getMinMaxCoordinatesTest180(){
+    void getMinMaxCoordinatesTest180() {
         EntityAnnotation entity5 = ocr180.getTextAnnotations().get(1);
         EntityAnnotation entity6 = ocr180.getTextAnnotations().get(7);
         BoundingPoly bp5 = getBoundingPoly(entity5);
@@ -105,7 +106,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void getMinMaxCoordinatesTest90(){
+    void getMinMaxCoordinatesTest90() {
         EntityAnnotation entity7 = ocr90.getTextAnnotations().get(5);
         EntityAnnotation entity8 = ocr90.getTextAnnotations().get(2);
         BoundingPoly bp7 = getBoundingPoly(entity7);
@@ -126,7 +127,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void createWordVerticeTest0(){
+    void createWordVerticeTest0() {
         EntityAnnotation entity1 = ocr0.getTextAnnotations().get(8);
         EntityAnnotation entity2 = ocr0.getTextAnnotations().get(15);
         BoundingPoly bp1 = getBoundingPoly(entity1);
@@ -157,7 +158,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void createWordVerticeTest270(){
+    void createWordVerticeTest270() {
         EntityAnnotation entity1 = ocr270.getTextAnnotations().get(3);
         EntityAnnotation entity2 = ocr270.getTextAnnotations().get(10);
         BoundingPoly bp1 = getBoundingPoly(entity1);
@@ -188,7 +189,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void createWordVerticeTest180(){
+    void createWordVerticeTest180() {
         EntityAnnotation entity1 = ocr180.getTextAnnotations().get(1);
         EntityAnnotation entity2 = ocr180.getTextAnnotations().get(7);
         BoundingPoly bp1 = getBoundingPoly(entity1);
@@ -216,8 +217,9 @@ public class RotationLogicTest {
         Assertions.assertArrayEquals(correctedVerticeArray1, correctedVerticeReference1);
         Assertions.assertArrayEquals(correctedVerticeArray2, correctedVerticeReference2);
     }
+
     @Test
-    void createWordVerticeTest90(){
+    void createWordVerticeTest90() {
         EntityAnnotation entity1 = ocr90.getTextAnnotations().get(4);
         EntityAnnotation entity2 = ocr90.getTextAnnotations().get(9);
         BoundingPoly bp1 = getBoundingPoly(entity1);
@@ -247,7 +249,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void getWordRotationTest0(){
+    void getWordRotationTest0() {
         EntityAnnotation entity1 = ocr0.getTextAnnotations().get(2);
         EntityAnnotation entity2 = ocr0.getTextAnnotations().get(21);
         EntityAnnotation entity3 = ocr0.getTextAnnotations().get(13);
@@ -264,7 +266,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void getWordRotationTest90(){
+    void getWordRotationTest90() {
         EntityAnnotation entity1 = ocr90.getTextAnnotations().get(3);
         EntityAnnotation entity2 = ocr90.getTextAnnotations().get(11);
         EntityAnnotation entity3 = ocr90.getTextAnnotations().get(35);
@@ -281,7 +283,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void getWordRotationTest180(){
+    void getWordRotationTest180() {
         EntityAnnotation entity1 = ocr180.getTextAnnotations().get(4);
         EntityAnnotation entity2 = ocr180.getTextAnnotations().get(9);
         EntityAnnotation entity3 = ocr180.getTextAnnotations().get(27);
@@ -298,7 +300,7 @@ public class RotationLogicTest {
     }
 
     @Test
-    void getWordRotationTest270(){
+    void getWordRotationTest270() {
         EntityAnnotation entity1 = ocr270.getTextAnnotations().get(4);
         EntityAnnotation entity2 = ocr270.getTextAnnotations().get(9);
         EntityAnnotation entity3 = ocr270.getTextAnnotations().get(27);
@@ -355,6 +357,7 @@ public class RotationLogicTest {
         Assertions.assertEquals(page.getWidth(), height);
         Assertions.assertEquals(page.getHeight(), width);
     }
+
     @Test
     void correctPageCoordinatesTest180() throws IOException {
         com.dsv.datafactory.model.Page page = generatePage(ocr180);
@@ -376,7 +379,7 @@ public class RotationLogicTest {
     @Test
     void correctWordCoordinatesTest0() throws IOException {
         com.dsv.datafactory.model.Page page = generatePage(ocr0);
-        List<Word> words= page.getLines().get(0).getWords();
+        List<Word> words = page.getLines().get(0).getWords();
         Word word1 = words.get(2);
         Word word2 = words.get(21);
         Word word3 = words.get(13);
@@ -396,7 +399,7 @@ public class RotationLogicTest {
     @Test
     void correctWordCoordinatesTest90() throws IOException {
         com.dsv.datafactory.model.Page page = generatePage(ocr90);
-        List<Word> words= page.getLines().get(0).getWords();
+        List<Word> words = page.getLines().get(0).getWords();
         Word word1 = words.get(4);
         Word word2 = words.get(9);
         Word word3 = words.get(27);
@@ -416,7 +419,7 @@ public class RotationLogicTest {
     @Test
     void correctWordCoordinatesTest180() throws IOException {
         com.dsv.datafactory.model.Page page = generatePage(ocr180);
-        List<Word> words= page.getLines().get(0).getWords();
+        List<Word> words = page.getLines().get(0).getWords();
         Word word1 = words.get(4);
         Word word2 = words.get(9);
         Word word3 = words.get(27);
@@ -436,7 +439,7 @@ public class RotationLogicTest {
     @Test
     void correctWordCoordinatesTest270() throws IOException {
         com.dsv.datafactory.model.Page page = generatePage(ocr270);
-        List<Word> words= page.getLines().get(0).getWords();
+        List<Word> words = page.getLines().get(0).getWords();
         Word word1 = words.get(4);
         Word word2 = words.get(9);
         Word word3 = words.get(27);
@@ -453,26 +456,26 @@ public class RotationLogicTest {
         Assertions.assertArrayEquals(boundingBoxToArray(word4.getBoundingBox()), referenceCoordinates4);
     }
 
-    int[] boundingBoxToArray(BoundingBox bbox){
+    int[] boundingBoxToArray(BoundingBox bbox) {
         int[] res = {bbox.getX1(), bbox.getY1(), bbox.getX2(), bbox.getY2()};
         return res;
     }
 
-    int[] verticeToArray(List<Vertices> vertices){
+    int[] verticeToArray(List<Vertices> vertices) {
         ArrayList<Integer> res = new ArrayList<>();
 
-        for(Vertices vertice:vertices){
+        for (Vertices vertice : vertices) {
             res.add(vertice.getX());
             res.add(vertice.getY());
         }
         return res.stream().mapToInt(i -> i).toArray();
     }
 
-    BoundingPoly getBoundingPoly(EntityAnnotation word){
+    BoundingPoly getBoundingPoly(EntityAnnotation word) {
         return word.getBoundingPoly();
     }
 
-    List<Vertices> getVertices(BoundingPoly bp){
+    List<Vertices> getVertices(BoundingPoly bp) {
         List<Vertices> res = new ArrayList<>();
         Vertices topLeft = bp.getVertices().get(0);
         Vertices topRight = bp.getVertices().get(1);
@@ -486,19 +489,19 @@ public class RotationLogicTest {
         return res;
     }
 
-    List<Vertices> getVertices(List<Vertices> VerticesList){
+    List<Vertices> getVertices(List<Vertices> VerticesList) {
         List<Vertices> res = new ArrayList<>();
-        for(Vertices Vertices: VerticesList){
+        for (Vertices Vertices : VerticesList) {
             res.add(new Vertices(Vertices.getX(), Vertices.getY()));
         }
         return res;
     }
 
-    List<Vertices> getCorrectedVertices(List<Vertices> VerticesList, int[] minMaxCoordinates){
+    List<Vertices> getCorrectedVertices(List<Vertices> VerticesList, int[] minMaxCoordinates) {
         List<Vertices> res = new ArrayList<>();
 
-        for(int i = 0; i<4; ++i ){
-            res.add(refac.createWordVertice(VerticesList.get(i),minMaxCoordinates));
+        for (int i = 0; i < 4; ++i) {
+            res.add(refac.createWordVertice(VerticesList.get(i), minMaxCoordinates));
         }
         return res;
     }
@@ -517,12 +520,12 @@ public class RotationLogicTest {
         page.setRotation(refac.getPageRotation(lines.get(0).getWords()));
         page.setLines(lines);
 
-        if(page.getRotation() != 0) refac.correctPageCoordinates(page);
+        if (page.getRotation() != 0) refac.correctPageCoordinates(page);
         return page;
 
     }
 
-    GoogleVisionResponse loadGoogleVisionResponse(String path){
+    GoogleVisionResponse loadGoogleVisionResponse(String path) {
         GoogleVisionResponse response = null;
         try {
             FileInputStream fileInputStream = new FileInputStream(path);

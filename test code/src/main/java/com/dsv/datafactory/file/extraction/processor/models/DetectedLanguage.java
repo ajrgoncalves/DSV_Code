@@ -4,9 +4,10 @@ public class DetectedLanguage {
     private float confidence;
     private String languageCode;
 
-    public DetectedLanguage(){}
+    public DetectedLanguage() {
+    }
 
-    public DetectedLanguage(float confidence, String languageCode){
+    public DetectedLanguage(float confidence, String languageCode) {
         this.confidence = confidence;
         this.languageCode = languageCode;
     }

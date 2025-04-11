@@ -5,9 +5,10 @@ public class DetectedBreak {
     private int typeValue;
     private boolean isPrefix;
 
-    public DetectedBreak(){}
+    public DetectedBreak() {
+    }
 
-    public DetectedBreak(String type, int typeValue, boolean isPrefix){
+    public DetectedBreak(String type, int typeValue, boolean isPrefix) {
         this.type = type;
         this.typeValue = typeValue;
         this.isPrefix = isPrefix;

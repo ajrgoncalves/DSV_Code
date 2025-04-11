@@ -1,6 +1,7 @@
 package com.dsv.datafactory.file.extraction;
 
 
+import org.apache.http.*;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -13,10 +14,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
-import org.apache.http.*;
 
 @Disabled // disabled due to unfinished tests - NPE / no uri
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -33,22 +33,21 @@ public class JenksTest {
 
 
     @Test
-    void testExampleRequest1(){
+    void testExampleRequest1() {
         testPost(jsonString1, referenceResponse1);
     }
 
     @Test
-    void testExampleRequest2(){
+    void testExampleRequest2() {
         testPost(jsonString2, referenceResponse2);
     }
 
     @Test
-    void testExampleRequest3(){
+    void testExampleRequest3() {
         testPost(jsonString3, referenceResponse3);
     }
 
-    void testPost(String jsonRequest, String referenceResponse)
-    {
+    void testPost(String jsonRequest, String referenceResponse) {
         CloseableHttpClient httpClient = HttpClients.custom().build();
         HttpPost post = new HttpPost("http://localhost:8892/jenks/clustering");
         StringBody json = new StringBody(jsonRequest, ContentType.APPLICATION_JSON);
@@ -57,7 +56,6 @@ public class JenksTest {
                 .create()
                 .addPart("json", json)
                 .build();
-
 
 
         post.setEntity(httpEntity);
@@ -82,14 +80,11 @@ public class JenksTest {
             assert responseBody.equals(referenceResponse);
 
 
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
-
-
 
 
 }

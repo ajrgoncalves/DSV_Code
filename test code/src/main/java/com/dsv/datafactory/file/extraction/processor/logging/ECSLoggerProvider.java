@@ -12,12 +12,13 @@ public class ECSLoggerProvider {
     public static ECSLogger getLogger(String className) {
         return getLogger(className, ECSLogger.Level.valueOf(getOrDefault(LOG_LEVEL_ENV_VAR, "WARN")));
     }
+
     public static ECSLogger getLogger(String className, ECSLogger.Level level) {
         ECSLogger logger = new ECSLogger(
                 getOrDefault(LOG_APP_NAME_SDD_ENV_VAR, "aifactory"),
                 getOrDefault(LOG_APP_ID_SDD_ENV_VAR, "5389"),
                 className);
         logger.setLevel(className, level);
-        return  logger;
+        return logger;
     }
 }

@@ -4,7 +4,7 @@ public class NormalizedVertices {
     private float X;
     private float Y;
 
-    public NormalizedVertices(float X, float Y){
+    public NormalizedVertices(float X, float Y) {
         this.X = X;
         this.Y = Y;
     }

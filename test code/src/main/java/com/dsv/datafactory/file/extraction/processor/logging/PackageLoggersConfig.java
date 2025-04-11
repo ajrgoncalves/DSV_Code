@@ -5,7 +5,7 @@ import com.dsv.logger.ECSLogger;
 import static com.dsv.datafactory.file.extraction.processor.util.ConfigurationLoader.getOrDefault;
 
 public class PackageLoggersConfig {
-    public static void configure(){
+    public static void configure() {
         configureKafkaLogger();
         configurePdfBoxLogger();
     }
@@ -24,7 +24,7 @@ public class PackageLoggersConfig {
         configurePackageLogger(PDFBOX_LOGGER_NAME, logLevel);
     }
 
-    private static void configurePackageLogger(String packageName, ECSLogger.Level logLevel){
+    private static void configurePackageLogger(String packageName, ECSLogger.Level logLevel) {
         ECSLogger logger = ECSLoggerProvider.getLogger(PackageLoggersConfig.class.getName());
         logger.setLevel(packageName, logLevel);
         logger.info("Package " + packageName + " log level set to " + logLevel.name());

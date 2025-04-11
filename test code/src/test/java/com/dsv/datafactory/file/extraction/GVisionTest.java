@@ -1,6 +1,5 @@
 package com.dsv.datafactory.file.extraction;
 
-import com.dsv.datafactory.file.extraction.processor.models.*;
 import com.dsv.datafactory.model.Document;
 import com.dsv.datafactory.model.Language;
 import com.dsv.datafactory.model.Line;
@@ -13,7 +12,6 @@ import com.google.cloud.vision.v1.Feature.Type;
 import com.google.cloud.vision.v1.Page;
 import com.google.common.hash.Hashing;
 import com.google.protobuf.ByteString;
-
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -30,16 +28,14 @@ import java.util.logging.Logger;
 
 @Disabled // Disabled due to depending on developer's local files
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GVisionTest
-{
+public class GVisionTest {
     private Path basePath = Paths.get("src", "test", "resources", "images");
 
     private static final Logger logger = Logger.getLogger(GVisionTest.class.getName());
 
 
     @Test
-    void testCreateDocument() throws IOException
-    {
+    void testCreateDocument() throws IOException {
 
         Document document = new Document();
         List<com.dsv.datafactory.model.Page> pages = new ArrayList<>();
@@ -150,21 +146,19 @@ public class GVisionTest
 
         document.setPages(pages);
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File(Paths.get(basePath.toString(),document.getKey()+".json").toString()), document);
+        mapper.writeValue(new File(Paths.get(basePath.toString(), document.getKey() + ".json").toString()), document);
         String jsonString = mapper.writeValueAsString(document);
         System.out.println(jsonString);
     }
 
 
-
     @Test
-    void testGetTextFromPng() throws IOException
-    {
+    void testGetTextFromPng() throws IOException {
 
         String folder = "invoice_1";
         List<String> pages = new ArrayList<>();
 
-        File dir = new File("C:\\Users\\Peter.S.Larsen\\OneDrive - DSV\\DNA-495-TEST\\"+ folder);
+        File dir = new File("C:\\Users\\Peter.S.Larsen\\OneDrive - DSV\\DNA-495-TEST\\" + folder);
         File[] directoryListing = dir.listFiles();
 
         for (int i = 0; i < directoryListing.length; i++) {
@@ -203,14 +197,13 @@ public class GVisionTest
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File(Paths.get(basePath.toString(),folder+".json").toString()), pages);
+        mapper.writeValue(new File(Paths.get(basePath.toString(), folder + ".json").toString()), pages);
         String jsonString = mapper.writeValueAsString(pages);
         System.out.println(jsonString);
     }
 
     @Test
-    void testBlankPages() throws IOException
-    {
+    void testBlankPages() throws IOException {
 
         Document document = new Document();
         List<com.dsv.datafactory.model.Page> pages = new ArrayList<>();
@@ -307,7 +300,7 @@ public class GVisionTest
 
                         lines.add(line);
                         page.setLines(lines);
-                    }catch (IndexOutOfBoundsException e) {
+                    } catch (IndexOutOfBoundsException e) {
                         // Log error (since IOException cannot be thrown by a Cloud Function)
                         logger.log(Level.WARNING, "Error detecting text, probable blank page: " + e.getMessage(), e);
 
@@ -326,19 +319,18 @@ public class GVisionTest
 
         document.setPages(pages);
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File(Paths.get(basePath.toString(),document.getKey()+".json").toString()), document);
+        mapper.writeValue(new File(Paths.get(basePath.toString(), document.getKey() + ".json").toString()), document);
         String jsonString = mapper.writeValueAsString(document);
         System.out.println(jsonString);
     }
 
     @Test
-    void testGetTextFromPdf() throws IOException
-    {
+    void testGetTextFromPdf() throws IOException {
 
         String folder = "invoice_1";
         List<String> pages = new ArrayList<>();
 
-        File dir = new File("C:\\Users\\Peter.S.Larsen\\OneDrive - DSV\\DNA-495-TEST\\"+ folder);
+        File dir = new File("C:\\Users\\Peter.S.Larsen\\OneDrive - DSV\\DNA-495-TEST\\" + folder);
         File[] directoryListing = dir.listFiles();
 
         for (int i = 0; i < directoryListing.length; i++) {
@@ -391,15 +383,14 @@ public class GVisionTest
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(new File(Paths.get(basePath.toString(),folder+"_pdf"+".json").toString()), pages);
+        mapper.writeValue(new File(Paths.get(basePath.toString(), folder + "_pdf" + ".json").toString()), pages);
         String jsonString = mapper.writeValueAsString(pages);
         System.out.println(jsonString);
     }
 
 
     @Test
-    void testCompareResults() throws IOException, NoSuchAlgorithmException
-    {
+    void testCompareResults() throws IOException, NoSuchAlgorithmException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         byte[] bytesPNG = Files.readAllBytes(Paths.get(basePath.toString(), "invoice_1.json"));
@@ -422,22 +413,22 @@ public class GVisionTest
             String hashPNG = Hashing.sha256().hashBytes(png.getBytes()).toString();
             String hashPDF = Hashing.sha256().hashBytes(pdf.getBytes()).toString();
 
-           Set<String> pagePng = new HashSet<>(Arrays.asList(png.split("\n")));
-           Set<String> pagePdf = new HashSet<>(Arrays.asList(pdf.split("\n")));
+            Set<String> pagePng = new HashSet<>(Arrays.asList(png.split("\n")));
+            Set<String> pagePdf = new HashSet<>(Arrays.asList(pdf.split("\n")));
 
-           System.out.println("page " + i);
+            System.out.println("page " + i);
 
-           System.out.println("Before ");
-           System.out.println("page size png: " + pagePng.size());
-           System.out.println("page size pdf: " + pagePdf.size());
+            System.out.println("Before ");
+            System.out.println("page size png: " + pagePng.size());
+            System.out.println("page size pdf: " + pagePdf.size());
 
-           System.out.println();
+            System.out.println();
 
 //           pagePdf.retainAll(pagePng);
 //           pagePng.retainAll(pagePdf);
 
 //           pagePng.removeAll(pagePdf);
-           pagePdf.removeAll(pagePng);
+            pagePdf.removeAll(pagePng);
 
 //            System.out.println("After");
 //            System.out.println("page size png: " + pagePng.size());
@@ -472,11 +463,7 @@ public class GVisionTest
             System.out.println();
 
 
-
         }
-
-
-
 
 
     }

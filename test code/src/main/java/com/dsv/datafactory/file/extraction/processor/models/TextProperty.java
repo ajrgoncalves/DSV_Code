@@ -6,9 +6,10 @@ public class TextProperty {
     private ArrayList<DetectedLanguage> detectedLanguages;
     private DetectedBreak detectedBreak;
 
-    public TextProperty(){}
+    public TextProperty() {
+    }
 
-    public TextProperty(ArrayList<DetectedLanguage> detectedLanguages, DetectedBreak detectedBreak){
+    public TextProperty(ArrayList<DetectedLanguage> detectedLanguages, DetectedBreak detectedBreak) {
         this.detectedBreak = detectedBreak;
         this.detectedLanguages = detectedLanguages;
     }

@@ -6,9 +6,10 @@ public class EntityAnnotation {
     private double confidence;
     private BoundingPoly boundingPoly;
 
-    public EntityAnnotation(){}
+    public EntityAnnotation() {
+    }
 
-    public EntityAnnotation(String locale, String description, double confidence, BoundingPoly boundingPoly){
+    public EntityAnnotation(String locale, String description, double confidence, BoundingPoly boundingPoly) {
         this.locale = locale;
         this.description = description;
         this.confidence = confidence;

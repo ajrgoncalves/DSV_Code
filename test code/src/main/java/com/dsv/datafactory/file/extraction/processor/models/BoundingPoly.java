@@ -25,11 +25,11 @@ public class BoundingPoly {
         return vertices;
     }
 
-    public void normalizeVertices(int width, int height){
+    public void normalizeVertices(int width, int height) {
         ArrayList<Vertices> normalized = new ArrayList<>();
-        for(Vertices vertex : this.vertices){
-            int x = vertex.getX()/width;
-            int y = vertex.getY()/height;
+        for (Vertices vertex : this.vertices) {
+            int x = vertex.getX() / width;
+            int y = vertex.getY() / height;
             normalized.add(new Vertices(x, y));
         }
     }

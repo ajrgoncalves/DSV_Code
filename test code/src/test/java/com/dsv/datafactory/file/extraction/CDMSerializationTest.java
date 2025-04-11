@@ -22,10 +22,9 @@ public class CDMSerializationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         Boolean condition = true;
         Page page = new Page();
-        try{
+        try {
             page = objectMapper.readValue(new File(testPagePath), Page.class);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             condition = false;
         }
         Assertions.assertTrue(condition);
@@ -44,11 +43,10 @@ public class CDMSerializationTest {
         Boolean condition = true;
         Word word1 = new Word();
         Word word2 = new Word();
-        try{
+        try {
             word1 = objectMapper.readValue(new File(testWordPath1), Word.class);
             word2 = objectMapper.readValue(new File(testWordPath2), Word.class);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             condition = false;
         }
         Assertions.assertTrue(condition);
@@ -88,9 +86,9 @@ public class CDMSerializationTest {
         return page;
     }
 
-    List<Language> getLanguage(JsonNode pageNode){
+    List<Language> getLanguage(JsonNode pageNode) {
         List<Language> languages = new ArrayList<>();
-        for(JsonNode obj: pageNode){
+        for (JsonNode obj : pageNode) {
             Language lang = new Language();
             lang.setLanguageCode(obj.get("languageCode").asText());
             lang.setConfidence((float) obj.get("confidence").asDouble());
@@ -100,9 +98,9 @@ public class CDMSerializationTest {
         return languages;
     }
 
-    List<Line> getLines(JsonNode pageNode){
+    List<Line> getLines(JsonNode pageNode) {
         List<Line> lines = new ArrayList<>();
-        for(JsonNode obj: pageNode){
+        for (JsonNode obj : pageNode) {
             Line line = new Line();
             line.setLineNumber(obj.get("lineNumber").asInt());
             line.setWords(getWordsFromJson(obj.get("words")));
@@ -112,19 +110,19 @@ public class CDMSerializationTest {
         return lines;
     }
 
-    List<Word> getWordsFromJson(JsonNode lineWords){
+    List<Word> getWordsFromJson(JsonNode lineWords) {
         List<Word> words = new ArrayList<>();
-        if(lineWords.isArray()){
-            for(JsonNode obj: lineWords){
+        if (lineWords.isArray()) {
+            for (JsonNode obj : lineWords) {
                 Word word = getSingleWord(obj);
             }
-        }else{
+        } else {
             words.add(getSingleWord(lineWords));
         }
         return words;
     }
 
-    Word getSingleWord(JsonNode word){
+    Word getSingleWord(JsonNode word) {
         Word newWord = new Word();
         newWord.setWord(word.get("word").asText());
         newWord.setConfidence(word.get("confidence").asInt());
@@ -140,11 +138,11 @@ public class CDMSerializationTest {
         return newWord;
     }
 
-    BoundingBox getBoundingBox(JsonNode bbox){
+    BoundingBox getBoundingBox(JsonNode bbox) {
         return new BoundingBox(bbox.get("x1").asInt(), bbox.get("x2").asInt(), bbox.get("y1").asInt(), bbox.get("y2").asInt());
     }
 
-    Vertices getVertice(JsonNode vertice){
-        return new Vertices(vertice.get("x"). asInt(), vertice.get("y"). asInt());
+    Vertices getVertice(JsonNode vertice) {
+        return new Vertices(vertice.get("x").asInt(), vertice.get("y").asInt());
     }
 }

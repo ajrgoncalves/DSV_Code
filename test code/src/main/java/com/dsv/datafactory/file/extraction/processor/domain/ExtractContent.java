@@ -13,38 +13,37 @@ import javax.inject.Inject;
 
 public class ExtractContent {
 
-	private final ReadImage extractor;
-	private final DocumentToDisk documentToDisk;
+    private final ReadImage extractor;
+    private final DocumentToDisk documentToDisk;
 
-	@Inject
-	public ExtractContent(ReadImage extractor, DocumentToDisk documentToDisk) {
-		this.extractor = extractor;
-		this.documentToDisk = documentToDisk;
-	}
+    @Inject
+    public ExtractContent(ReadImage extractor, DocumentToDisk documentToDisk) {
+        this.extractor = extractor;
+        this.documentToDisk = documentToDisk;
+    }
 
-	private final ECSLogger logger = ECSLoggerProvider.getLogger(ExtractContent.class.getName());
+    private final ECSLogger logger = ECSLoggerProvider.getLogger(ExtractContent.class.getName());
 
-	public MetaData execute(MetaData metaData) {
+    public MetaData execute(MetaData metaData) {
 
-		logger.info("key: " + metaData.key);
+        logger.info("key: " + metaData.key);
 
-		try {
+        try {
 
-			Document parsedDocument = extractor.extract(metaData.sortedImagePaths,metaData.key);
+            Document parsedDocument = extractor.extract(metaData.sortedImagePaths, metaData.key);
 
-			logger.info("Saving hocr to disk");
-			documentToDisk.execute(metaData.key,parsedDocument,metaData.shipmentId);
+            logger.info("Saving hocr to disk");
+            documentToDisk.execute(metaData.key, parsedDocument, metaData.shipmentId);
 
-			metaData.extractedOCRDocumentPath =  parsedDocument.getPathToDocumentFile();
-			logger.info("Setting metaData paths to " + metaData.extractedOCRDocumentPath);
-			return metaData;
+            metaData.extractedOCRDocumentPath = parsedDocument.getPathToDocumentFile();
+            logger.info("Setting metaData paths to " + metaData.extractedOCRDocumentPath);
+            return metaData;
 
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
 
-	}
+    }
 }

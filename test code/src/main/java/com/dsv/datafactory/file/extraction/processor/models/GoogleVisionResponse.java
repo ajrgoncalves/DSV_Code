@@ -14,7 +14,7 @@ public class GoogleVisionResponse {
         this.textAnnotations = textAnnotations;
     }
 
-    public void addTextAnnotation(EntityAnnotation entity){
+    public void addTextAnnotation(EntityAnnotation entity) {
         this.textAnnotations.add(entity);
     }
 

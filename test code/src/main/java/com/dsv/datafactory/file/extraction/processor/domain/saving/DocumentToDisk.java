@@ -5,8 +5,10 @@ import com.dsv.datafactory.model.Document;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 
-
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 
@@ -15,28 +17,27 @@ public class DocumentToDisk {
 
     final static Logger logger = Logger.getLogger(DocumentToDisk.class.getSimpleName());
 
-    public void execute(String key, Document res,String shipmentId) throws IOException
-    {
-        String pathDocument =  ConfigurationLoader.getOrDefault("PATH_DOCUMENT", "/files/hocr/")+shipmentId+"/";
+    public void execute(String key, Document res, String shipmentId) throws IOException {
+        String pathDocument = ConfigurationLoader.getOrDefault("PATH_DOCUMENT", "/files/hocr/") + shipmentId + "/";
         checkIfExists(pathDocument);
         saveDocumentAsJson(key, res, pathDocument);
     }
 
-    private void saveDocumentAsJson(String key, Document file,String pathToDocument) throws IOException
-    {
-            writeToJson(key,file,pathToDocument);
+    private void saveDocumentAsJson(String key, Document file, String pathToDocument) throws IOException {
+        writeToJson(key, file, pathToDocument);
     }
 
-    private void checkIfExists(String pathShipmentIdFolder){
+    private void checkIfExists(String pathShipmentIdFolder) {
         File file = new File(pathShipmentIdFolder);
         if (!file.exists()) {
             file.mkdir();
         }
 
     }
-    private void writeToJson(String key, Document doc,String pathDocument) throws IOException {
+
+    private void writeToJson(String key, Document doc, String pathDocument) throws IOException {
         String documentExt = "json";
-        String fullPath = pathDocument +key + "."+ documentExt;
+        String fullPath = pathDocument + key + "." + documentExt;
         doc.setPathToDocumentFile(fullPath);
         logger.info("fullpath is: " + fullPath);
 

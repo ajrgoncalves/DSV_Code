@@ -19,6 +19,7 @@ import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 
 import javax.inject.Inject;
+import javax.swing.text.Document;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

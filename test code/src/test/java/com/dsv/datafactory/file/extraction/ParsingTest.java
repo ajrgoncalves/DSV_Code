@@ -1,12 +1,9 @@
 package com.dsv.datafactory.file.extraction;
 
 import com.dsv.datafactory.file.extraction.processor.Config;
-import com.dsv.datafactory.file.extraction.processor.domain.ocr.GoogleOcr;
 import com.dsv.datafactory.file.extraction.processor.domain.ocr.GoogleOcrP;
 import com.dsv.datafactory.file.extraction.processor.domain.ocr.OcrParser;
 import com.dsv.datafactory.file.extraction.processor.models.*;
-import com.dsv.datafactory.file.extraction.processor.models.BoundingPoly;
-import com.dsv.datafactory.file.extraction.processor.models.EntityAnnotation;
 import com.dsv.datafactory.model.Vertices;
 import com.google.cloud.vision.v1.*;
 import com.google.cloud.vision.v1.TextAnnotation;
@@ -15,19 +12,25 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ParsingTest {
     String testDir = "src/test/resources/AnnotateImageResponseObjects_v2/";
     File[] paths = new File(testDir).listFiles();
+
     @BeforeAll
-    void setup(){
+    void setup() {
         Config config = new Config();
         config.runGVInPararell = "false";
         GoogleOcrP refacOcr = new GoogleOcrP(config);
     }
+
     @Test
     void testPages1() throws IOException {
         testPagesBody(loadAnnotateImageResponse(paths[0].getAbsolutePath()));
@@ -151,10 +154,10 @@ public class ParsingTest {
     }
 
 
-    void testTextAnnotationsBody(AnnotateImageResponse raw){
+    void testTextAnnotationsBody(AnnotateImageResponse raw) {
         GoogleVisionResponse parsed = new OcrParser(raw).parse();
         checkAnnotationsCount(parsed, raw);
-        for(int i = 0; i < parsed.getTextAnnotations().size(); ++i){
+        for (int i = 0; i < parsed.getTextAnnotations().size(); ++i) {
             EntityAnnotation parsedEntity = parsed.getTextAnnotations().get(i);
             com.google.cloud.vision.v1.EntityAnnotation rawEntity = raw.getTextAnnotations(i);
 
@@ -162,14 +165,14 @@ public class ParsingTest {
         }
     }
 
-    void testPagesBody(AnnotateImageResponse raw){
+    void testPagesBody(AnnotateImageResponse raw) {
         GoogleVisionResponse parsed = new OcrParser(raw).parse();
         ArrayList<GooglePage> parsedPages = parsed.getFullTextAnnotation().getPages();
         List<Page> rawPages = raw.getFullTextAnnotation().getPagesList();
 
         checkPageCount(parsed, raw);
         Assertions.assertEquals(parsed.getFullTextAnnotation().getText(), raw.getFullTextAnnotation().getText());
-        for(int i = 0; i < rawPages.size(); ++i) {
+        for (int i = 0; i < rawPages.size(); ++i) {
             GooglePage parsedPage = parsedPages.get(i);
             Page rawPage = rawPages.get(i);
             checkPageProperties(parsedPage, rawPage);
@@ -181,10 +184,10 @@ public class ParsingTest {
         GoogleVisionResponse parsed = new OcrParser(raw).parse();
         ArrayList<GooglePage> parsedPages = parsed.getFullTextAnnotation().getPages();
         List<Page> rawPages = raw.getFullTextAnnotation().getPagesList();
-        for(int i = 0; i < rawPages.size(); ++i) {
+        for (int i = 0; i < rawPages.size(); ++i) {
             GooglePage parsedPage = parsedPages.get(i);
             Page rawPage = rawPages.get(i);
-            for(int j = 0; j < parsedPage.getBlocks().size(); ++j) {
+            for (int j = 0; j < parsedPage.getBlocks().size(); ++j) {
                 GoogleBlock parsedBlock = parsedPage.getBlocks().get(j);
                 Block rawBlock = rawPage.getBlocks(j);
 
@@ -198,13 +201,13 @@ public class ParsingTest {
         GoogleVisionResponse parsed = new OcrParser(raw).parse();
         ArrayList<GooglePage> parsedPages = parsed.getFullTextAnnotation().getPages();
         List<Page> rawPages = raw.getFullTextAnnotation().getPagesList();
-        for(int i = 0; i < rawPages.size(); ++i) {
+        for (int i = 0; i < rawPages.size(); ++i) {
             GooglePage parsedPage = parsedPages.get(i);
             Page rawPage = rawPages.get(i);
-            for(int j = 0; j < parsedPage.getBlocks().size(); ++j) {
+            for (int j = 0; j < parsedPage.getBlocks().size(); ++j) {
                 GoogleBlock parsedBlock = parsedPage.getBlocks().get(j);
                 Block rawBlock = rawPage.getBlocks(j);
-                for(int k = 0; k < parsedBlock.getParagraphs().size(); ++k) {
+                for (int k = 0; k < parsedBlock.getParagraphs().size(); ++k) {
                     GoogleParagraph parsedParagraph = parsedBlock.getParagraphs().get(k);
                     Paragraph rawParagraph = rawBlock.getParagraphs(k);
 
@@ -219,16 +222,16 @@ public class ParsingTest {
         GoogleVisionResponse parsed = new OcrParser(raw).parse();
         ArrayList<GooglePage> parsedPages = parsed.getFullTextAnnotation().getPages();
         List<Page> rawPages = raw.getFullTextAnnotation().getPagesList();
-        for(int i = 0; i < rawPages.size(); ++i) {
+        for (int i = 0; i < rawPages.size(); ++i) {
             GooglePage parsedPage = parsedPages.get(i);
             Page rawPage = rawPages.get(i);
-            for(int j = 0; j < parsedPage.getBlocks().size(); ++j) {
+            for (int j = 0; j < parsedPage.getBlocks().size(); ++j) {
                 GoogleBlock parsedBlock = parsedPage.getBlocks().get(j);
                 Block rawBlock = rawPage.getBlocks(j);
-                for(int k = 0; k < parsedBlock.getParagraphs().size(); ++k) {
+                for (int k = 0; k < parsedBlock.getParagraphs().size(); ++k) {
                     GoogleParagraph parsedParagraph = parsedBlock.getParagraphs().get(k);
                     Paragraph rawParagraph = rawBlock.getParagraphs(k);
-                    for(int l = 0; l < parsedParagraph.getWords().size(); ++l){
+                    for (int l = 0; l < parsedParagraph.getWords().size(); ++l) {
                         GoogleWord parsedWord = parsedParagraph.getWords().get(l);
                         Word rawWord = rawParagraph.getWords(l);
 
@@ -244,19 +247,19 @@ public class ParsingTest {
         GoogleVisionResponse parsed = new OcrParser(raw).parse();
         ArrayList<GooglePage> parsedPages = parsed.getFullTextAnnotation().getPages();
         List<Page> rawPages = raw.getFullTextAnnotation().getPagesList();
-        for(int i = 0; i < rawPages.size(); ++i) {
+        for (int i = 0; i < rawPages.size(); ++i) {
             GooglePage parsedPage = parsedPages.get(i);
             Page rawPage = rawPages.get(i);
-            for(int j = 0; j < parsedPage.getBlocks().size(); ++j) {
+            for (int j = 0; j < parsedPage.getBlocks().size(); ++j) {
                 GoogleBlock parsedBlock = parsedPage.getBlocks().get(j);
                 Block rawBlock = rawPage.getBlocks(j);
-                for(int k = 0; k < parsedBlock.getParagraphs().size(); ++k) {
+                for (int k = 0; k < parsedBlock.getParagraphs().size(); ++k) {
                     GoogleParagraph parsedParagraph = parsedBlock.getParagraphs().get(k);
                     Paragraph rawParagraph = rawBlock.getParagraphs(k);
-                    for(int l = 0; l < parsedParagraph.getWords().size(); ++l) {
+                    for (int l = 0; l < parsedParagraph.getWords().size(); ++l) {
                         GoogleWord parsedWord = parsedParagraph.getWords().get(l);
                         Word rawWord = rawParagraph.getWords(l);
-                        for(int m = 0; m < parsedWord.getSymbols().size(); ++m){
+                        for (int m = 0; m < parsedWord.getSymbols().size(); ++m) {
                             GoogleSymbol parsedSymbol = parsedWord.getSymbols().get(m);
                             Symbol rawSymbol = rawWord.getSymbols(m);
 
@@ -269,59 +272,59 @@ public class ParsingTest {
     }
 
 
-    void checkPageCount(GoogleVisionResponse parsed, AnnotateImageResponse raw){
+    void checkPageCount(GoogleVisionResponse parsed, AnnotateImageResponse raw) {
         ArrayList<GooglePage> parsedPages = parsed.getFullTextAnnotation().getPages();
         List<Page> rawPages = raw.getFullTextAnnotation().getPagesList();
 
         Assertions.assertEquals(parsedPages.size(), rawPages.size());
     }
 
-    void checkBlockCount(GooglePage parsed, Page raw){
+    void checkBlockCount(GooglePage parsed, Page raw) {
         Assertions.assertEquals(parsed.getBlocks().size(), raw.getBlocksCount());
     }
 
-    void checkParagraphCount(GoogleBlock parsed, Block raw){
+    void checkParagraphCount(GoogleBlock parsed, Block raw) {
         Assertions.assertEquals(parsed.getParagraphs().size(), raw.getParagraphsList().size());
     }
 
-    void checkWordCount(GoogleParagraph parsed, Paragraph raw){
+    void checkWordCount(GoogleParagraph parsed, Paragraph raw) {
         Assertions.assertEquals(parsed.getWords().size(), raw.getWordsList().size());
     }
 
-    void checkSymbolCount(GoogleWord parsed, Word raw){
+    void checkSymbolCount(GoogleWord parsed, Word raw) {
         Assertions.assertEquals(parsed.getSymbols().size(), raw.getSymbolsList().size());
     }
 
-    void checkAnnotationsCount(GoogleVisionResponse parsed, AnnotateImageResponse raw){
+    void checkAnnotationsCount(GoogleVisionResponse parsed, AnnotateImageResponse raw) {
         Assertions.assertEquals(parsed.getTextAnnotations().size(), raw.getTextAnnotationsList().size());
     }
 
-    void checkPageProperties(GooglePage parsed, Page raw){
+    void checkPageProperties(GooglePage parsed, Page raw) {
         Assertions.assertEquals(parsed.getConfidence(), raw.getConfidence());
         Assertions.assertEquals(parsed.getHeight(), raw.getHeight());
         Assertions.assertEquals(parsed.getWidth(), raw.getWidth());
         checkTextProperty(parsed.getTextProperty(), raw.getProperty());
     }
 
-    void checkBlockProperties(GoogleBlock parsed, Block raw){
+    void checkBlockProperties(GoogleBlock parsed, Block raw) {
         Assertions.assertEquals(parsed.getBlockType(), raw.getBlockType().name());
         checkBoundingPoly(parsed.getBoundingBox(), raw.getBoundingBox());
         checkTextProperty(parsed.getProperty(), raw.getProperty());
     }
 
-    void checkParagraphProperties(GoogleParagraph parsed, Paragraph raw){
+    void checkParagraphProperties(GoogleParagraph parsed, Paragraph raw) {
         Assertions.assertEquals(parsed.getConfidence(), raw.getConfidence());
         checkBoundingPoly(parsed.getBoundingBox(), raw.getBoundingBox());
         checkTextProperty(parsed.getProperty(), raw.getProperty());
     }
 
-    void checkWordProperties(GoogleWord parsed, Word raw){
+    void checkWordProperties(GoogleWord parsed, Word raw) {
         Assertions.assertEquals(parsed.getConfidence(), raw.getConfidence());
         checkBoundingPoly(parsed.getBoundingBox(), raw.getBoundingBox());
         checkTextProperty(parsed.getProperty(), raw.getProperty());
     }
 
-    void checkSymbolProperties(GoogleSymbol parsed, Symbol raw){
+    void checkSymbolProperties(GoogleSymbol parsed, Symbol raw) {
         Assertions.assertEquals(parsed.getConfidence(), raw.getConfidence());
         Assertions.assertEquals(parsed.getText(), raw.getText());
         checkBoundingPoly(parsed.getBoundingBox(), raw.getBoundingBox());
@@ -329,23 +332,23 @@ public class ParsingTest {
 
     }
 
-    void checkAnnotationProperties(EntityAnnotation parsed, com.google.cloud.vision.v1.EntityAnnotation raw){
+    void checkAnnotationProperties(EntityAnnotation parsed, com.google.cloud.vision.v1.EntityAnnotation raw) {
         Assertions.assertEquals(parsed.getConfidence(), raw.getConfidence());
         Assertions.assertEquals(parsed.getLocale(), raw.getLocale());
         Assertions.assertEquals(parsed.getDescription(), raw.getDescription());
         checkBoundingPoly(parsed.getBoundingPoly(), raw.getBoundingPoly());
     }
 
-    void checkBoundingPoly(BoundingPoly parsed, com.google.cloud.vision.v1.BoundingPoly raw){
-        for(int i = 0; i < parsed.getVertices().size(); ++i){
+    void checkBoundingPoly(BoundingPoly parsed, com.google.cloud.vision.v1.BoundingPoly raw) {
+        for (int i = 0; i < parsed.getVertices().size(); ++i) {
             Vertices parsedVertex = parsed.getVertices().get(i);
             Vertex rawVertex = raw.getVertices(i);
 
             Assertions.assertEquals(parsedVertex.getX(), rawVertex.getX());
             Assertions.assertEquals(parsedVertex.getY(), rawVertex.getY());
         }
-        for(int i = 0; i < parsed.getNormalizedVertices().size(); ++i){
-            NormalizedVertices parsedNVertex= parsed.getNormalizedVertices().get(i);
+        for (int i = 0; i < parsed.getNormalizedVertices().size(); ++i) {
+            NormalizedVertices parsedNVertex = parsed.getNormalizedVertices().get(i);
             NormalizedVertex rawNVertex = raw.getNormalizedVertices(i);
 
             Assertions.assertEquals(parsedNVertex.getX(), rawNVertex.getX());
@@ -353,25 +356,25 @@ public class ParsingTest {
         }
     }
 
-    void checkTextProperty(TextProperty parsed, TextAnnotation.TextProperty raw){
+    void checkTextProperty(TextProperty parsed, TextAnnotation.TextProperty raw) {
         checkDetectedLanguage(parsed.getDetectedLanguages(), raw.getDetectedLanguagesList());
         checkDetectedBreak(parsed.getDetectedBreak(), raw.getDetectedBreak());
     }
 
-    void checkDetectedLanguage(ArrayList<DetectedLanguage> parsed, List<TextAnnotation.DetectedLanguage> raw){
-        for(int i = 0; i < parsed.size(); ++i){
+    void checkDetectedLanguage(ArrayList<DetectedLanguage> parsed, List<TextAnnotation.DetectedLanguage> raw) {
+        for (int i = 0; i < parsed.size(); ++i) {
             Assertions.assertEquals(parsed.get(i).getConfidence(), raw.get(i).getConfidence());
             Assertions.assertEquals(parsed.get(i).getLanguageCode(), raw.get(i).getLanguageCode());
         }
     }
 
-    void checkDetectedBreak(DetectedBreak parsed, TextAnnotation.DetectedBreak raw){
+    void checkDetectedBreak(DetectedBreak parsed, TextAnnotation.DetectedBreak raw) {
         Assertions.assertEquals(parsed.getType(), raw.getType().name());
         Assertions.assertEquals(parsed.getTypeValue(), raw.getType().getNumber());
         Assertions.assertEquals(parsed.getIsPrefix(), raw.getIsPrefix());
     }
 
-    AnnotateImageResponse loadAnnotateImageResponse(String path){
+    AnnotateImageResponse loadAnnotateImageResponse(String path) {
         AnnotateImageResponse annotateImageResponse = null;
 
         try {
