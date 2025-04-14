@@ -5,7 +5,6 @@ import com.dsv.datafactory.file.extraction.processor.domain.ocr.GoogleOcrP;
 import com.dsv.datafactory.file.extraction.processor.domain.ocr.OcrParser;
 import com.dsv.datafactory.file.extraction.processor.models.*;
 import com.dsv.datafactory.model.Vertices;
-import com.google.cloud.vision.v1.*;
 import com.google.cloud.vision.v1.TextAnnotation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,7 +26,7 @@ public class ParsingTest {
     @BeforeAll
     void setup() {
         Config config = new Config();
-        config.runGVInPararell = "false";
+        config.runGVInParallel = "false";
         GoogleOcrP refacOcr = new GoogleOcrP(config);
     }
 

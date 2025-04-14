@@ -2,6 +2,7 @@ package com.dsv.datafactory.file.extraction.processor.domain;
 
 import com.dsv.datafactory.file.extraction.processor.Config;
 import com.dsv.datafactory.file.extraction.processor.logging.ECSLoggerProvider;
+import com.dsv.datafactory.file.extraction.processor.util.Constants;
 import com.dsv.datafactory.model.*;
 import com.dsv.logger.ECSLogger;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,8 +17,10 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.icepdf.core.pobjects.Page;
 
 import javax.inject.Inject;
+import javax.swing.text.Document;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -31,8 +34,11 @@ public class ExtractLines {
     String goodnessOfFit;
     private final ECSLogger logger = ECSLoggerProvider.getLogger(ExtractLines.class.getName());
 
+    private Constants constants;
+
     @Inject
     public ExtractLines(Config config) {
+        //TODO: update with config.Builder
         this.lineServiceUrl = config.lineServiceUrl;
         this.startNumberOfClasses = config.startNumberOfClasses;
         this.goodnessOfFit = config.goodnessOfFit;
@@ -51,6 +57,7 @@ public class ExtractLines {
 
                 JsonArray values = JsonParser.parseString(strBoxes.toString()).getAsJsonArray();
                 startNumberOfClasses = String.valueOf(Math.round(2 * Math.log(values.size())));
+                //TODO: pass this values to constants
                 requestValue.add("values", values);
                 requestValue.addProperty("start_num_of_class", startNumberOfClasses);
                 requestValue.addProperty("min_goodness_of_fit", goodnessOfFit);
@@ -76,6 +83,7 @@ public class ExtractLines {
             newLine.setWords(newWords);
             newLines.add(newLine);
         }
+        //TODO: check this line
         int newWords = (int) newLines.stream().map(Line::getWords).mapToLong(List::size).sum();
         if (!newLines.isEmpty() && originalNumWords == newWords) {
             originalPage.setLines(newLines);

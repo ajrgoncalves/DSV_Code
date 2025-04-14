@@ -1,5 +1,6 @@
 package com.dsv.datafactory.file.extraction.processor.models;
 
+//TODO: Add annotations replacing the builders and constructors.
 public class EntityAnnotation {
     private String locale;
     private String description;

@@ -2,6 +2,7 @@ package com.dsv.datafactory.file.extraction.processor.models;
 
 import java.util.ArrayList;
 
+//TODO: Add annotations replacing the builders and constructors.
 public class TextAnnotation {
     private ArrayList<GooglePage> pages;
     private String text;

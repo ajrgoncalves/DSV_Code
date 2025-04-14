@@ -1,11 +1,7 @@
 package com.dsv.datafactory.file.extraction.processor.domain.ocr;
 
 import com.dsv.datafactory.file.extraction.processor.models.*;
-import com.dsv.datafactory.file.extraction.processor.models.BoundingPoly;
-import com.dsv.datafactory.file.extraction.processor.models.EntityAnnotation;
-import com.dsv.datafactory.file.extraction.processor.models.TextAnnotation;
 import com.dsv.datafactory.model.Vertices;
-import com.google.cloud.vision.v1.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +9,11 @@ import java.util.List;
 public class OcrParser {
     AnnotateImageResponse raw;
 
-    public OcrParser(AnnotateImageResponse response){
+    public OcrParser(AnnotateImageResponse response) {
         this.raw = response;
     }
 
-    public GoogleVisionResponse parse(){
+    public GoogleVisionResponse parse() {
         GoogleVisionResponse parsed = new GoogleVisionResponse();
         parsed.setTextAnnotations(parseTextAnnotations(raw.getTextAnnotationsList()));
         parsed.setFullTextAnnotation(parseFullTextAnnotation(raw.getFullTextAnnotation()));
@@ -25,29 +21,29 @@ public class OcrParser {
         return parsed;
     }
 
-    public ArrayList<EntityAnnotation> parseTextAnnotations(List<com.google.cloud.vision.v1.EntityAnnotation> rawTextAnnotations){
+    public ArrayList<EntityAnnotation> parseTextAnnotations(List<com.google.cloud.vision.v1.EntityAnnotation> rawTextAnnotations) {
         ArrayList<EntityAnnotation> parsedEntities = new ArrayList<>();
 
-        for(com.google.cloud.vision.v1.EntityAnnotation rawEntity: rawTextAnnotations){
+        for (com.google.cloud.vision.v1.EntityAnnotation rawEntity : rawTextAnnotations) {
             parsedEntities.add(parseEntityAnnotation(rawEntity));
         }
         return parsedEntities;
     }
 
-    public EntityAnnotation parseEntityAnnotation(com.google.cloud.vision.v1.EntityAnnotation rawEntity){
+    public EntityAnnotation parseEntityAnnotation(com.google.cloud.vision.v1.EntityAnnotation rawEntity) {
         BoundingPoly parsedPoly = parseBoundingPoly(rawEntity.getBoundingPoly());
         return new EntityAnnotation(rawEntity.getLocale(), rawEntity.getDescription(), rawEntity.getConfidence(), parsedPoly);
     }
 
-    public BoundingPoly parseBoundingPoly(com.google.cloud.vision.v1.BoundingPoly rawBoundingPoly){
+    public BoundingPoly parseBoundingPoly(com.google.cloud.vision.v1.BoundingPoly rawBoundingPoly) {
         BoundingPoly parsedPoly = new BoundingPoly();
         ArrayList<Vertices> vertices = new ArrayList<>();
         ArrayList<NormalizedVertices> normVertices = new ArrayList<>();
 
-        for(Vertex rawVertex : rawBoundingPoly.getVerticesList() ){
+        for (Vertex rawVertex : rawBoundingPoly.getVerticesList()) {
             vertices.add(new Vertices(rawVertex.getX(), rawVertex.getY()));
         }
-        for(NormalizedVertex rawVertex : rawBoundingPoly.getNormalizedVerticesList() ){
+        for (NormalizedVertex rawVertex : rawBoundingPoly.getNormalizedVerticesList()) {
             normVertices.add(new NormalizedVertices(rawVertex.getX(), rawVertex.getY()));
         }
         parsedPoly.setVertices(vertices);
@@ -56,7 +52,7 @@ public class OcrParser {
         return parsedPoly;
     }
 
-    public TextAnnotation parseFullTextAnnotation(com.google.cloud.vision.v1.TextAnnotation fullTextAnnotation){
+    public TextAnnotation parseFullTextAnnotation(com.google.cloud.vision.v1.TextAnnotation fullTextAnnotation) {
         TextAnnotation parsedTextAnnotation = new TextAnnotation();
         parsedTextAnnotation.setText(fullTextAnnotation.getText());
         parsedTextAnnotation.setPages(parsePages(fullTextAnnotation.getPagesList()));
@@ -64,10 +60,10 @@ public class OcrParser {
         return parsedTextAnnotation;
     }
 
-    public ArrayList<GooglePage> parsePages(List<Page> rawPages){
+    public ArrayList<GooglePage> parsePages(List<Page> rawPages) {
         ArrayList<GooglePage> parsedPages = new ArrayList<>();
 
-        for(Page rawPage : rawPages){
+        for (Page rawPage : rawPages) {
             GooglePage parsed = new GooglePage();
             parsed.setConfidence(rawPage.getConfidence());
             parsed.setHeight(rawPage.getHeight());
@@ -81,13 +77,13 @@ public class OcrParser {
         return parsedPages;
     }
 
-    public TextProperty parseTextProperty(com.google.cloud.vision.v1.TextAnnotation.TextProperty rawTextProperty){
+    public TextProperty parseTextProperty(com.google.cloud.vision.v1.TextAnnotation.TextProperty rawTextProperty) {
         TextProperty property = new TextProperty();
-        ArrayList<DetectedLanguage> detectedLanguages= new ArrayList<>();
+        ArrayList<DetectedLanguage> detectedLanguages = new ArrayList<>();
         com.google.cloud.vision.v1.TextAnnotation.DetectedBreak rawBreak = rawTextProperty.getDetectedBreak();
         DetectedBreak detectedBreak = new DetectedBreak(rawBreak.getType().name(), rawBreak.getTypeValue(), rawBreak.getIsPrefix());
         property.setDetectedBreak(detectedBreak);
-        for(com.google.cloud.vision.v1.TextAnnotation.DetectedLanguage rawDL: rawTextProperty.getDetectedLanguagesList() ){
+        for (com.google.cloud.vision.v1.TextAnnotation.DetectedLanguage rawDL : rawTextProperty.getDetectedLanguagesList()) {
             detectedLanguages.add(new DetectedLanguage(rawDL.getConfidence(), rawDL.getLanguageCode()));
         }
         property.setDetectedLanguages(detectedLanguages);
@@ -96,9 +92,9 @@ public class OcrParser {
     }
 
 
-    public ArrayList<GoogleBlock> parseBlocks(List<Block> rawBlocks){
+    public ArrayList<GoogleBlock> parseBlocks(List<Block> rawBlocks) {
         ArrayList<GoogleBlock> blocks = new ArrayList<>();
-        for(Block rawBlock : rawBlocks){
+        for (Block rawBlock : rawBlocks) {
             GoogleBlock block = new GoogleBlock();
             block.setBlockType(rawBlock.getBlockType().name());
             block.setConfidence(rawBlock.getConfidence());
@@ -112,9 +108,9 @@ public class OcrParser {
         return blocks;
     }
 
-    public ArrayList<GoogleParagraph> parseParagraphs(List<Paragraph> rawParagraphs){
+    public ArrayList<GoogleParagraph> parseParagraphs(List<Paragraph> rawParagraphs) {
         ArrayList<GoogleParagraph> paragraphs = new ArrayList<>();
-        for(Paragraph rawParagraph : rawParagraphs){
+        for (Paragraph rawParagraph : rawParagraphs) {
             GoogleParagraph paragraph = new GoogleParagraph();
             paragraph.setBoundingBox(parseBoundingPoly(rawParagraph.getBoundingBox()));
             paragraph.setConfidence(rawParagraph.getConfidence());
@@ -127,9 +123,9 @@ public class OcrParser {
         return paragraphs;
     }
 
-    public ArrayList<GoogleWord> parseWords(List<Word> rawWords){
+    public ArrayList<GoogleWord> parseWords(List<Word> rawWords) {
         ArrayList<GoogleWord> words = new ArrayList<>();
-        for(Word rawWord : rawWords){
+        for (Word rawWord : rawWords) {
             GoogleWord word = new GoogleWord();
             word.setConfidence(rawWord.getConfidence());
             word.setProperty(parseTextProperty(rawWord.getProperty()));
@@ -141,9 +137,9 @@ public class OcrParser {
         return words;
     }
 
-    public ArrayList<GoogleSymbol> parseSymbols(List<Symbol> rawSymbols){
+    public ArrayList<GoogleSymbol> parseSymbols(List<Symbol> rawSymbols) {
         ArrayList<GoogleSymbol> symbols = new ArrayList<>();
-        for(Symbol rawSymbol : rawSymbols){
+        for (Symbol rawSymbol : rawSymbols) {
             GoogleSymbol symbol = new GoogleSymbol();
             symbol.setBoundingBox(parseBoundingPoly(rawSymbol.getBoundingBox()));
             symbol.setText(rawSymbol.getText());

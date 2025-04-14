@@ -2,6 +2,7 @@ package com.dsv.datafactory.file.extraction.processor.models;
 
 import java.util.ArrayList;
 
+//TODO: Add annotations replacing the builders and constructors.
 public class GoogleWord {
     private TextProperty property;
     private BoundingPoly boundingBox;

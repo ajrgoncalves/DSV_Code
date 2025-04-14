@@ -1,29 +1,16 @@
 package com.dsv.datafactory.file.extraction.processor.models;
 
 import com.dsv.datafactory.model.Vertices;
+import jdk.nashorn.internal.objects.annotations.Getter;
+import jdk.nashorn.internal.objects.annotations.Setter;
 
 import java.util.ArrayList;
 
+@Getter
+@Setter
 public class BoundingPoly {
     private ArrayList<Vertices> vertices;
     private ArrayList<NormalizedVertices> normalizedVertices;
-
-
-    public void setVertices(ArrayList<Vertices> vertices) {
-        this.vertices = vertices;
-    }
-
-    public void setNormalizedVertices(ArrayList<NormalizedVertices> normalizedVertices) {
-        this.normalizedVertices = normalizedVertices;
-    }
-
-    public ArrayList<NormalizedVertices> getNormalizedVertices() {
-        return normalizedVertices;
-    }
-
-    public ArrayList<Vertices> getVertices() {
-        return vertices;
-    }
 
     public void normalizeVertices(int width, int height) {
         ArrayList<Vertices> normalized = new ArrayList<>();

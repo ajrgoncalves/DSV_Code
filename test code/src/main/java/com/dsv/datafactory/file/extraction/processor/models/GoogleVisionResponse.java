@@ -19,9 +19,14 @@ public class GoogleVisionResponse {
     }
 
     public void addMultipleTextAnnotations(ArrayList<EntityAnnotation> textAnnotations) {
-        for (EntityAnnotation textAnnotation : textAnnotations) {
-            this.textAnnotations.add(textAnnotation);
+        //TODO: Add all will be more efficient
+        if (textAnnotations != null && !textAnnotations.isEmpty()) {
+            this.textAnnotations.addAll(textAnnotations);
         }
+
+//        for (EntityAnnotation textAnnotation : textAnnotations) {
+//            this.textAnnotations.add(textAnnotation);
+//        }
     }
 
     public TextAnnotation getFullTextAnnotation() {

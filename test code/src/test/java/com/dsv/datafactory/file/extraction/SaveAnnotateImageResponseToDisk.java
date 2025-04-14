@@ -28,7 +28,7 @@ public class SaveAnnotateImageResponseToDisk {
     @BeforeAll
     void setup() {
         Config config = new Config();
-        config.runGVInPararell = "false";
+        config.runGVInParallel = "false";
         refac = new GoogleOcrP(config);
     }
 

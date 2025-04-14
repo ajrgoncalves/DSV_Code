@@ -34,7 +34,7 @@ public class RotationLogicTest {
     @BeforeEach
     void setup() {
         Config config = new Config();
-        config.runGVInPararell = "false";
+        config.runGVInParallel = "false";
         refac = new GoogleOcrP(config);
         ocr270 = loadGoogleVisionResponse("src/test/resources/SerializedGoogleVisionResponses/0be2936c091083d30d5ec089e1c26ecd4becfa0a8b511c83febc8c57bc3d2cdc1.json");
         ocr90 = loadGoogleVisionResponse("src/test/resources/SerializedGoogleVisionResponses/4ff6d7edf0d7f06f53cd480a21ccaabaab1ad426fb471898741d8bde05b5f9f84.json");

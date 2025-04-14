@@ -66,7 +66,7 @@ public class PerformanceTests {
                 bind(Config.class).toInstance(config);
                 config.lineServiceUrl = "http://localhost:8005/jenks/clustering";
                 config.goodnessOfFit = ".999";
-                config.runGVInPararell = "false";
+                config.runGVInParallel = "false";
                 ExtractLines extractLines = new ExtractLines(config);
                 bind(ExtractLines.class).toInstance(extractLines);
             }

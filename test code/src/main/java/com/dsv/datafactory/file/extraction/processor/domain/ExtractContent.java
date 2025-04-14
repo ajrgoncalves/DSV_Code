@@ -26,6 +26,7 @@ public class ExtractContent {
 
     public MetaData execute(MetaData metaData) {
 
+        //TODO: should we pass a key on a log info ?
         logger.info("key: " + metaData.key);
 
         try {

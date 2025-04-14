@@ -1,5 +1,6 @@
 package com.dsv.datafactory.file.extraction.processor.models;
 
+//TODO: Add annotations replacing the builders and constructors.
 public class DetectedBreak {
     private String type;
     private int typeValue;

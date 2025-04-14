@@ -18,6 +18,7 @@ public class DocumentToDisk {
     final static Logger logger = Logger.getLogger(DocumentToDisk.class.getSimpleName());
 
     public void execute(String key, Document res, String shipmentId) throws IOException {
+        //TODO: Should we use constants ?
         String pathDocument = ConfigurationLoader.getOrDefault("PATH_DOCUMENT", "/files/hocr/") + shipmentId + "/";
         checkIfExists(pathDocument);
         saveDocumentAsJson(key, res, pathDocument);

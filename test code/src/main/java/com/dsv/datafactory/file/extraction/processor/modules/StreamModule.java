@@ -28,6 +28,8 @@ public class StreamModule implements Module {
 
     @Provides
     @Singleton
+    //TODO: Change Config config to use config.Builder to get the values
+    //TODO: Add to constants some strings used bellow, if it makes sense.
     public KafkaStreams provideStream(Config config, ExtractionStream extractionStream) {
         final StreamsBuilder builder = new StreamsBuilder();
         extractionStream.createFrom(builder);
@@ -44,7 +46,7 @@ public class StreamModule implements Module {
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, config.kafkaBootstrapServers);
         props.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, ConfigurationLoader.getOrDefault("KAFKA_PROCESSING_GUARANTEE", "at_least_once"));
 
-        props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, config.kakfaPollIntervalMs);
+        props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, config.kafkaPollIntervalMs);
         props.put(ConsumerConfig.REQUEST_TIMEOUT_MS_CONFIG, config.kafkaRequestTimeoutMs);
 
         props.put(ConsumerConfig.FETCH_MAX_BYTES_CONFIG, config.kafkaMaxRequestSize);

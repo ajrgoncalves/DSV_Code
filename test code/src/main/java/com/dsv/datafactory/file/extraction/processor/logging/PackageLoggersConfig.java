@@ -5,6 +5,8 @@ import com.dsv.logger.ECSLogger;
 import static com.dsv.datafactory.file.extraction.processor.util.ConfigurationLoader.getOrDefault;
 
 public class PackageLoggersConfig {
+    //TODO: Can we use constants here for some of those strings ?
+
     public static void configure() {
         configureKafkaLogger();
         configurePdfBoxLogger();

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-
+//TODO: Add annotations replacing the Getter and Setters.
 @RequiredArgsConstructor
 public class ErrorMessage implements Serializable {
     @Getter
