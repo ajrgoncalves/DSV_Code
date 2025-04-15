@@ -17,6 +17,8 @@ public class CDMSerializationTest {
     String testWordPath1 = "src/test/resources/CDMFiles/word_test1.json";
     String testWordPath2 = "src/test/resources/CDMFiles/word_test2.json";
 
+    //TODO: We can create a before each or before all for objectMapper for instance
+
     @Test
     void testPageDeserialization() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -56,6 +58,7 @@ public class CDMSerializationTest {
         Word manualWord1 = getSingleWord(objectMapper.readTree(json1));
         Word manualWord2 = getSingleWord(objectMapper.readTree(json2));
 
+        //TODO: Can we create a helper method for this assertions ?
         Assertions.assertEquals(word1.getRotation(), manualWord1.getRotation());
         Assertions.assertEquals(word1.getWord(), manualWord1.getWord());
         Assertions.assertEquals(word1.getConfidence(), manualWord1.getConfidence());
@@ -114,6 +117,7 @@ public class CDMSerializationTest {
         List<Word> words = new ArrayList<>();
         if (lineWords.isArray()) {
             for (JsonNode obj : lineWords) {
+                //TODO: words.add(getSingleWord(obj));
                 Word word = getSingleWord(obj);
             }
         } else {
@@ -139,7 +143,12 @@ public class CDMSerializationTest {
     }
 
     BoundingBox getBoundingBox(JsonNode bbox) {
-        return new BoundingBox(bbox.get("x1").asInt(), bbox.get("x2").asInt(), bbox.get("y1").asInt(), bbox.get("y2").asInt());
+        return new BoundingBox(
+                bbox.get("x1").asInt(),
+                bbox.get("x2").asInt(),
+                bbox.get("y1").asInt(),
+                bbox.get("y2").asInt()
+        );
     }
 
     Vertices getVertice(JsonNode vertice) {

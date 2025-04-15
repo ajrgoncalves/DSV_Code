@@ -26,6 +26,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//TODO: TestInstance.Lifecycle.PER_CLASS-> make sure you want to have this in this test.
 @Disabled // Disabled due to depending on developer's local files
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GVisionTest {
@@ -33,6 +34,8 @@ public class GVisionTest {
 
     private static final Logger logger = Logger.getLogger(GVisionTest.class.getName());
 
+    //TODO: Create helper functions that used on different test scenarios to avoid redundancy
+    //TODO: Before each may be helpfull for some cases
 
     @Test
     void testCreateDocument() throws IOException {
@@ -40,6 +43,7 @@ public class GVisionTest {
         Document document = new Document();
         List<com.dsv.datafactory.model.Page> pages = new ArrayList<>();
 
+        //TODO: this path file should be in some constants/config file
         File dir = new File("C:\\Users\\Peter.S.Larsen\\OneDrive - DSV\\DNA-495-TEST\\invoice_5");
         File[] directoryListing = dir.listFiles();
 
@@ -158,6 +162,7 @@ public class GVisionTest {
         String folder = "invoice_1";
         List<String> pages = new ArrayList<>();
 
+        //TODO: Should we use this path as constant or in a config file ?
         File dir = new File("C:\\Users\\Peter.S.Larsen\\OneDrive - DSV\\DNA-495-TEST\\" + folder);
         File[] directoryListing = dir.listFiles();
 

@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /// // path names must used forward "/" when building in linux env
 
+//TODO: This path does not exist here
 @Disabled // Disabled due to missing resource files
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BuildTest {
@@ -57,6 +58,7 @@ public class BuildTest {
             MetaData imageExtractionMetadata = new MetaData();
             imageExtractionMetadata.fileName = file.getName();
             imageExtractionMetadata.sortedImagePaths = newFormat;
+            //TODO: Add an when thenReturn or it will not return anything
             MetaData extraction = extractContent.execute(imageExtractionMetadata);
             assertNotNull(extraction);
         }
