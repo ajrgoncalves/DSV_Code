@@ -83,7 +83,10 @@ public class GoogleOcr {
         Image processedImage = processImg(pathToImg);
         List<AnnotateImageRequest> requests = generatePngRequest(processedImage, this.feature);
 
-        //TODO: Should we use try catch ?
+        //TODO: we can call it like this and return the response
+        AnnotateImageResponse annotateImageResponse = retrieveAnnotatedImageResponse(requests);
+
+        //TODO: this code bellow will call redundancy retrieveAnnotatedImageResponse
         if (retrieveAnnotatedImageResponse(requests) == null || !retrieveAnnotatedImageResponse(requests).hasFullTextAnnotation()) {
             logger.error(String.format("Image %s contains no text", pathToImg));
             return null;
@@ -117,6 +120,7 @@ public class GoogleOcr {
     /**
      * Checking the page rotation based on the distribution of words rotation
      **/
+    //TODO: Do we have a library that can make this ?
     public int getPageRotation(List<Word> words) {
         int[] rotations = {0, 0, 0, 0};
         for (Word word : words) {

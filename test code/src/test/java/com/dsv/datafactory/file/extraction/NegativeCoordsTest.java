@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class NegativeCoordsTest {
+    //TODO: Use constants or config files for this values bellow
     //GoogleOcr googleOcr = new GoogleOcr();
     GoogleOcrP refac;
 
@@ -35,7 +36,10 @@ public class NegativeCoordsTest {
         EntityAnnotation entity1 = ocr.getTextAnnotations().get(4);
         Word word1 = refac.generateWord(entity1);
         System.out.println(entity1.getBoundingPoly());
-        Assertions.assertTrue(word1.getBoundingBox().getX1() >= 0 & word1.getBoundingBox().getX2() >= 0 & word1.getBoundingBox().getY1() >= 0 & word1.getBoundingBox().getY2() >= 0);
+        Assertions.assertTrue(word1.getBoundingBox().getX1() >= 0
+                & word1.getBoundingBox().getX2() >= 0
+                & word1.getBoundingBox().getY1() >= 0
+                & word1.getBoundingBox().getY2() >= 0);
     }
 
     @Test

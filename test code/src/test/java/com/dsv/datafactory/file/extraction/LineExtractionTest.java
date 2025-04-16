@@ -40,6 +40,10 @@ import java.util.stream.Collectors;
 @Disabled // disabled due to referencing unusable test_folder directory
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class LineExtractionTest {
+
+    //TODO: Use some config/constants file with this values like urls
+    //TODO: In this test, shouldn't we use mocks instead of having "new" methods to obtain results ?
+
     private Path basePath = Paths.get("src", "test", "resources", "images");
 
     private static final Logger logger = Logger.getLogger(GVisionTest.class.getName());
@@ -65,6 +69,7 @@ public class LineExtractionTest {
                 document.setKey(file.getName());
             }
 
+            //TODO: Try to split this method in smaller methods
             if (file.getName().toLowerCase().endsWith(".png")) {
                 System.out.println(file.getName());
                 String imgName = file.getName();
@@ -216,6 +221,7 @@ public class LineExtractionTest {
 
         CloseableHttpClient httpClient = HttpClients.custom().build();
         //HttpPost post = new HttpPost(lineServiceUrl);
+        //TODO: Use config or constant file for this path
         HttpPost post = new HttpPost("http://localhost:8892/jenks/clustering");
         StringBody json = new StringBody(jsonRequest, ContentType.APPLICATION_JSON);
 

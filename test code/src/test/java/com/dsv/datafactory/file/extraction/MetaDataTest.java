@@ -33,6 +33,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @Disabled //For now disabled for build do to external file reference
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MetaDataTest {
+    //TODO: Use constants or config files for this values bellow
+    //TODO: Try to split methods in smaller methods to be more readable
+
     private ExtractContent extractContent;
     private ExtractLines extractLines;
     private String testCases = "C:\\Users\\Kaden.Behan\\OneDrive - DSV\\Desktop\\test_cases_file_extractor\\";
@@ -83,6 +86,7 @@ public class MetaDataTest {
 
     @Test
     void testMetaDataUpdated() throws IOException {
+        //TODO: This MetaData is duplicated, avoid redundancy
         MetaData uploadedFile = new MetaData();
         uploadedFile.key = "sample_key5";
         uploadedFile.fileName = "sample_output";
@@ -102,6 +106,7 @@ public class MetaDataTest {
 
     @Test
     void testLineExtraction() throws IOException {
+        //TODO: This MetaData is duplicated, avoid redundancy
         MetaData uploadedFile = new MetaData();
         uploadedFile.key = "sample_key5";
         uploadedFile.fileName = "sample_output";
@@ -280,6 +285,8 @@ public class MetaDataTest {
 
     }
 
+    //TODO: This test has different type of asserts, maybe we should create different tests. Besides that,
+    // probably we can try to use params in the test so it can the times needed with different values
     @Test
     void testWordCountMatching() throws IOException {
         ///Test case 1 num words should be both 100//
@@ -371,6 +378,7 @@ public class MetaDataTest {
     @Disabled
     @Test
     void generateOutput() throws IOException {
+        //TODO: use config or constant files for this path and values
         ArrayList<String> pathReg1 = new ArrayList<>(Collections.singletonList("src\\test\\resources\\build_data\\standard\\regression\\comparison_pngs\\0547240.jpg"));
         ArrayList<String> pathReg2 = new ArrayList<>(Arrays.asList("src\\test\\resources\\build_data\\standard\\regression\\comparison_pngs\\A05BER07D99118B15_01_10.jpg", "src\\test\\resources\\build_data\\standard\\regression\\comparison_pngs\\A05BER07D99118B15_01_11.jpg"));
         MetaData uploadedFile1 = new MetaData();

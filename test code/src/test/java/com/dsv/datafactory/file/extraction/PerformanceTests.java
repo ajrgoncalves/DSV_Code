@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 @Disabled
 public class PerformanceTests {
 
+    //TODO: Use constants or config files for this values bellow
+
     public GoogleOcr ocr = new GoogleOcr();
     public GoogleOcrP refac;
     public Config config = new Config();
@@ -75,6 +77,8 @@ public class PerformanceTests {
 
     @Test
     public void testLargeFiles() throws IOException {
+        //TODO: Use constants or config files for this values bellow, also part are duplicated
+
         ///Test bottle neck for files with over 6k words
         config.lineServiceUrl = "http://localhost:8005/jenks/clustering";
         config.startNumberOfClasses = "5";
@@ -92,6 +96,7 @@ public class PerformanceTests {
 
     @Test
     public void testLargeFilesAverage() throws IOException {
+        //TODO: Use constants or config files for this values bellow, also part are duplicated
         ///Test bottle neck for files with over 6k words
         config.lineServiceUrl = "http://localhost:8005/jenks/clustering";
         config.startNumberOfClasses = "5";
@@ -128,6 +133,7 @@ public class PerformanceTests {
 
     @Test
     public void testLargeFilesAverageRefact() throws IOException {
+        //TODO: Use constants or config files for this values bellow, also part are duplicated
         ///Test bottle neck for files with over 6k words
         config.lineServiceUrl = "http://localhost:8005/jenks/clustering";
         config.startNumberOfClasses = "5";

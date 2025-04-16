@@ -20,6 +20,7 @@ import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ParsingTest {
+    //TODO: Use constants or config files for this values bellow
     String testDir = "src/test/resources/AnnotateImageResponseObjects_v2/";
     File[] paths = new File(testDir).listFiles();
 
@@ -30,6 +31,7 @@ public class ParsingTest {
         GoogleOcrP refacOcr = new GoogleOcrP(config);
     }
 
+    //TODO: improve this test to pass params in order to avoid redundancy of "same test"
     @Test
     void testPages1() throws IOException {
         testPagesBody(loadAnnotateImageResponse(paths[0].getAbsolutePath()));
@@ -50,6 +52,7 @@ public class ParsingTest {
         testPagesBody(loadAnnotateImageResponse(paths[3].getAbsolutePath()));
     }
 
+    //TODO: improve this test to pass params in order to avoid redundancy of "same test"
     @Test
     void testBlocks1() throws IOException {
         testBlocksBody(loadAnnotateImageResponse(paths[0].getAbsolutePath()));
@@ -70,6 +73,7 @@ public class ParsingTest {
         testBlocksBody(loadAnnotateImageResponse(paths[3].getAbsolutePath()));
     }
 
+    //TODO: improve this test to pass params in order to avoid redundancy of "same test"
     @Test
     void testParagraphs1() throws IOException {
         testParagraphsBody(loadAnnotateImageResponse(paths[0].getAbsolutePath()));
@@ -90,6 +94,7 @@ public class ParsingTest {
         testParagraphsBody(loadAnnotateImageResponse(paths[3].getAbsolutePath()));
     }
 
+    //TODO: improve this test to pass params in order to avoid redundancy of "same test"
     @Test
     void testWords1() throws IOException {
         testWordsBody(loadAnnotateImageResponse(paths[0].getAbsolutePath()));
@@ -110,7 +115,7 @@ public class ParsingTest {
         testWordsBody(loadAnnotateImageResponse(paths[3].getAbsolutePath()));
     }
 
-
+    //TODO: improve this test to pass params in order to avoid redundancy of "same test"
     @Test
     void testSymbols1() throws IOException {
         testSymbolsBody(loadAnnotateImageResponse(paths[0].getAbsolutePath()));
@@ -131,7 +136,7 @@ public class ParsingTest {
         testSymbolsBody(loadAnnotateImageResponse(paths[3].getAbsolutePath()));
     }
 
-
+    //TODO: improve this test to pass params in order to avoid redundancy of "same test"
     @Test
     void testTextAnnotations1() throws IOException {
         testTextAnnotationsBody(loadAnnotateImageResponse(paths[0].getAbsolutePath()));
